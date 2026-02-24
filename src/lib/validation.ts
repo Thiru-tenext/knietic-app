@@ -86,8 +86,8 @@ export function validateScript(script: string): { valid: boolean; error?: string
     return { valid: false, error: 'Script is required' };
   }
 
-  if (script.length < 10) {
-    return { valid: false, error: 'Script must be at least 10 characters' };
+  if (script.length < 3) {
+    return { valid: false, error: 'Script must be at least 3 characters' };
   }
 
   if (script.length > 5000) {
@@ -105,8 +105,8 @@ export function validateStylePrompt(prompt: string): { valid: boolean; error?: s
     return { valid: false, error: 'Style prompt is required' };
   }
 
-  if (prompt.length < 5) {
-    return { valid: false, error: 'Style prompt must be at least 5 characters' };
+  if (prompt.length < 3) {
+    return { valid: false, error: 'Style prompt must be at least 3 characters' };
   }
 
   if (prompt.length > 1000) {

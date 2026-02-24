@@ -104,24 +104,24 @@ export function HowItWorks() {
               </div>
            </div>
            
-           <div className="lg:w-1/2 w-full relative p-4 lg:p-8">
-              <div className="aspect-video bg-black rounded-md overflow-hidden relative shadow-4xl group-hover:scale-[1.01] transition-transform duration-1000 border border-white/5">
+           <div className="lg:w-1/2 w-full relative p-4 lg:p-12 flex justify-center">
+              <div className="aspect-[9/16] max-w-[320px] w-full bg-black rounded-[2.5rem] overflow-hidden relative shadow-[0_50px_100px_-20px_rgba(0,0,0,0.6)] group-hover:scale-[1.02] transition-transform duration-1000 border border-white/10 ring-1 ring-white/5">
                  <video 
                    ref={videoRef}
                    autoPlay 
                    loop 
                    muted={isMuted} 
                    playsInline 
-                   className="w-full h-full object-cover opacity-60 group-hover:opacity-100 transition-opacity duration-1000"
+                   className="w-full h-full object-cover transition-opacity duration-1000"
                  >
                    <source src="/assets/video2.mp4" type="video/mp4" />
                  </video>
                  
-                 <div className="absolute inset-0 bg-gradient-to-t from-black via-transparent to-transparent pointer-events-none" />
+                 <div className="absolute inset-0 bg-gradient-to-t from-black/40 via-transparent to-transparent pointer-events-none" />
  
                  <button 
                    onClick={toggleMute}
-                   className="absolute bottom-6 right-6 p-4 bg-mirage-lime text-black rounded-md shadow-glow-lime hover:scale-110 active:scale-95 transition-all z-20"
+                   className="absolute bottom-8 right-8 p-4 bg-mirage-lime/80 backdrop-blur-md text-black rounded-2xl shadow-glow-lime hover:scale-110 active:scale-95 transition-all z-20"
                  >
                    {isMuted ? <VolumeX className="w-5 h-5" /> : <Volume2 className="w-5 h-5" />}
                  </button>

@@ -26,6 +26,7 @@ export function SimpleStudioModal({ projectName, isOpen, onClose, onGenerate }: 
   const [step, setStep] = useState(1);
   const [isGenerating, setIsGenerating] = useState(false);
   const [status, setStatus] = useState('');
+  const [error, setError] = useState('');
   
   const [files, setFiles] = useState<{
     logo: File | null;
@@ -59,26 +60,86 @@ export function SimpleStudioModal({ projectName, isOpen, onClose, onGenerate }: 
 
   const startGeneration = async () => {
     setIsGenerating(true);
+    setError('');
     
-    const steps = [
-      "Analyzing music with Librosa beat tracking...",
-      "Extracting onset patterns via FFmpeg...",
-      "Enhancing script with AI narrative engine...",
-      "Synthesizing kinetic typography layers...",
-      "Matching transitions to audio peaks...",
-      "Finalizing Remotion project structure..."
-    ];
+    try {
+      // 1. Upload Assets
+      setStatus("Uploading assets to local storage...");
+      const formData = new FormData();
+      if (files.logo) formData.append('logo', files.logo);
+      if (files.music) formData.append('music', files.music);
+      if (files.video) formData.append('video', files.video);
+      files.images.forEach(img => formData.append('productImages', img));
 
-    for (const stepText of steps) {
-      setStatus(stepText);
-      await new Promise(resolve => setTimeout(resolve, 1200));
+      const uploadRes = await fetch('/api/upload', {
+        method: 'POST',
+        body: formData
+      });
+      const uploadData = await uploadRes.json();
+      if (!uploadData.success) {
+        throw new Error(uploadData.error?.message || uploadData.error || 'Upload failed');
+      }
+      const uploadedAssets = uploadData.data;
+
+      // 2. Beat Analysis
+      setStatus("Analyzing music beats and tempo...");
+      const beatRes = await fetch('/api/beat-analysis', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ musicFileUrl: uploadedAssets.music.url })
+      });
+      const beatData = await beatRes.json();
+      if (!beatData.success) {
+        throw new Error(beatData.error?.message || beatData.error || 'Beat analysis failed');
+      }
+      const beatAnalysis = beatData.data;
+
+      // 3. Script Enhancement
+      setStatus("Enhancing script for cinematic impact...");
+      const scriptRes = await fetch('/api/script-enhancement', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ 
+          originalScript: textData.script,
+          stylePrompt: textData.prompt 
+        })
+      });
+      const scriptData = await scriptRes.json();
+      if (!scriptData.success) {
+        throw new Error(scriptData.error?.message || scriptData.error || 'Script enhancement failed');
+      }
+      const enhancedScript = scriptData.data.enhancedScript;
+
+      // 4. Timeline Synthesis (AI Master)
+      setStatus("Synthesizing kinetic typography timeline...");
+      const timelineRes = await fetch('/api/generate-timeline', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          projectName,
+          enhancedScript,
+          originalScript: textData.script,
+          stylePrompt: textData.prompt,
+          beatAnalysis,
+          uploadedAssets
+        })
+      });
+      const timelineData = await timelineRes.json();
+      if (!timelineData.success) {
+        throw new Error(timelineData.error?.message || timelineData.error || 'Timeline generation failed');
+      }
+
+      onGenerate({
+        ...timelineData.data,
+        projectName
+      });
+
+    } catch (err: any) {
+      console.error("Generation failed:", err);
+      setStatus("Error in synthesis chain");
+      setError(err.message || "An unexpected error occurred");
+      setIsGenerating(false);
     }
-
-    onGenerate({
-      ...files,
-      ...textData,
-      projectName
-    });
   };
 
   const renderContent = () => {
@@ -90,7 +151,17 @@ export function SimpleStudioModal({ projectName, isOpen, onClose, onGenerate }: 
             <Loader2 className="w-16 h-16 text-mirage-lime animate-spin relative z-10" />
           </div>
           <h3 className="text-2xl font-black text-white mb-2">Generating Your Masterpiece</h3>
-          <p className="text-slate-400 font-medium animate-pulse">{status}</p>
+          <p className={`text-xl font-black mb-4 ${error ? 'text-rose-500' : 'text-slate-400 animate-pulse'}`}>
+            {error ? `ERROR: ${error.toUpperCase()}` : status}
+          </p>
+          {error && (
+            <button 
+              onClick={() => { setIsGenerating(false); setError(''); }}
+              className="px-6 py-2 bg-white/5 border border-white/10 rounded-md text-white font-bold hover:bg-white/10 transition-all"
+            >
+              Retry Configuration
+            </button>
+          )}
         </div>
       );
     }

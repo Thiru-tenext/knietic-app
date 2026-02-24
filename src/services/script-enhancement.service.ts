@@ -73,12 +73,83 @@ class ScriptEnhancementService {
     originalScript: string,
     stylePrompt: string
   ): Promise<ScriptEnhancementResult> {
-    // TODO: Implement AI service integration
-    // This would call OpenAI, Claude, or other AI service
-    // using SYSTEM_PROMPTS.SCRIPT_ENHANCEMENT and API_PROMPTS.SCRIPT_ENHANCEMENT_USER_PROMPT
+    const config = getConfig();
+    const apiKey = config.ai.apiKey;
+    const provider = config.ai.provider;
 
-    logger.info('Using AI for script enhancement (placeholder)');
-    return this.getMockEnhancedScript(originalScript, stylePrompt);
+    if (!apiKey) {
+      throw new ValidationError('AI service enabled but API key is missing');
+    }
+
+    logger.info(`Calling ${provider} for script enhancement`);
+
+    let enhancedContent: string;
+
+    if (provider === 'gemini') {
+      const response = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/${config.ai.model}:generateContent?key=${apiKey}`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          contents: [{
+            parts: [{
+              text: `You are a professional scriptwriter and motion graphics director. Rewrite the user's script to be more cinematic and impactful. Also, identify 3-5 key words or phrases that should be emphasized in the animation.\n\nScript: ${originalScript}\nStyle Direction: ${stylePrompt}\n\nRespond ONLY with a JSON object: { "enhancedScript": "the rewritten script", "emphasizedWords": ["word1", "word2", ...] }`
+            }]
+          }],
+          generationConfig: {
+            response_mime_type: "application/json"
+          }
+        })
+      });
+
+      if (!response.ok) {
+        const errorData = await response.json();
+        throw new Error(`Gemini API error: ${JSON.stringify(errorData)}`);
+      }
+
+      const aiResponse = await response.json();
+      enhancedContent = aiResponse.candidates[0].content.parts[0].text;
+    } else {
+      const response = await fetch('https://api.openai.com/v1/chat/completions', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${apiKey}`,
+        },
+        body: JSON.stringify({
+          model: config.ai.model,
+          messages: [
+            {
+              role: 'system',
+              content: 'You are a professional scriptwriter and motion graphics director. Rewrite the user\'s script to be more cinematic and impactful. Also, identify 3-5 key words or phrases that should be emphasized in the animation.'
+            },
+            {
+              role: 'user',
+              content: `Script: ${originalScript}\nStyle Direction: ${stylePrompt}\n\nRespond ONLY with a JSON object: { "enhancedScript": "the rewritten script", "emphasizedWords": ["word1", "word2", ...] }`
+            }
+          ],
+          temperature: 0.7,
+          response_format: { type: 'json_object' }
+        })
+      });
+
+      if (!response.ok) {
+        const errorData = await response.json();
+        throw new Error(`OpenAI API error: ${errorData.error?.message || response.statusText}`);
+      }
+
+      const aiResponse = await response.json();
+      enhancedContent = aiResponse.choices[0].message.content;
+    }
+
+    const data = JSON.parse(enhancedContent);
+
+    return {
+      originalScript,
+      enhancedScript: data.enhancedScript,
+      emphasizedWords: data.emphasizedWords,
+    };
   }
 
   /**

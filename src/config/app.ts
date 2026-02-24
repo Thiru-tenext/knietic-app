@@ -53,9 +53,9 @@ function buildAppConfig(env: EnvironmentConfig): AppConfig {
       region: env.AWS_REGION,
     },
     ai: {
-      provider: env.AI_MODEL.includes('gpt') ? 'openai' : 'anthropic',
+      provider: env.AI_MODEL.includes('gpt') ? 'openai' : env.AI_MODEL.includes('gemini') ? 'gemini' : 'anthropic',
       model: env.AI_MODEL,
-      apiKey: env.OPENAI_API_KEY || env.ANTHROPIC_API_KEY,
+      apiKey: env.GEMINI_API_KEY || env.OPENAI_API_KEY || env.ANTHROPIC_API_KEY,
     },
     features: {
       mockApi: env.ENABLE_MOCK_API,

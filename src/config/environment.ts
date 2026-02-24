@@ -14,28 +14,29 @@ const optionalEnvVars = {
   NEXT_PUBLIC_API_URL: process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3000',
   NEXT_PUBLIC_APP_NAME: process.env.NEXT_PUBLIC_APP_NAME || 'Kinetic Typography',
   API_TIMEOUT_MS: process.env.API_TIMEOUT_MS || '30000',
-  
+
   // Storage Configuration
   STORAGE_PROVIDER: (process.env.STORAGE_PROVIDER || 'local') as 'local' | 's3' | 'gcs' | 'cloudinary',
   AWS_REGION: process.env.AWS_REGION || 'us-east-1',
   AWS_BUCKET_NAME: process.env.AWS_BUCKET_NAME || '',
   CLOUDINARY_CLOUD_NAME: process.env.CLOUDINARY_CLOUD_NAME || '',
   CLOUDINARY_API_KEY: process.env.CLOUDINARY_API_KEY || '',
-  
+
   // AI/ML Services
   OPENAI_API_KEY: process.env.OPENAI_API_KEY || '',
   ANTHROPIC_API_KEY: process.env.ANTHROPIC_API_KEY || '',
-  AI_MODEL: (process.env.AI_MODEL || 'gpt-4o-mini') as 'gpt-4o' | 'gpt-4o-mini' | 'claude-3-5-sonnet',
-  
+  GEMINI_API_KEY: process.env.GEMINI_API_KEY || '',
+  AI_MODEL: (process.env.AI_MODEL || 'gpt-4o-mini') as 'gpt-4o' | 'gpt-4o-mini' | 'claude-3-5-sonnet' | 'gemini-1.5-pro' | 'gemini-1.5-flash',
+
   // Music Analysis
   MUSIC_ANALYSIS_SERVICE: (process.env.MUSIC_ANALYSIS_SERVICE || 'mock') as 'mock' | 'librosa' | 'spotify',
   SPOTIFY_CLIENT_ID: process.env.SPOTIFY_CLIENT_ID || '',
   SPOTIFY_CLIENT_SECRET: process.env.SPOTIFY_CLIENT_SECRET || '',
-  
+
   // Database
   DATABASE_URL: process.env.DATABASE_URL || '',
   DATABASE_TYPE: (process.env.DATABASE_TYPE || 'sqlite') as 'postgresql' | 'mongodb' | 'firebase' | 'sqlite',
-  
+
   // Feature Flags
   ENABLE_MOCK_API: process.env.ENABLE_MOCK_API === 'true',
   ENABLE_BEAT_ANALYSIS: process.env.ENABLE_BEAT_ANALYSIS === 'true',

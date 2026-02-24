@@ -153,37 +153,95 @@ CINEMATIC STRUCTURE (typical example):
 
 Your output MUST be valid, parseable JSON with no markdown formatting, explanation text, or code blocks.`;
 
-    // TODO: Replace with actual API call to Claude/OpenAI
-    // const response = await fetch('https://api.openai.com/v1/chat/completions', {
-    //   method: 'POST',
-    //   headers: {
-    //     'Content-Type': 'application/json',
-    //     'Authorization': `Bearer ${process.env.OPENAI_API_KEY || 'YOU_NEED_TO_ADD_API_KEY_HERE'}`,
-    //   },
-    //   body: JSON.stringify({
-    //     model: 'gpt-4o',
-    //     messages: [
-    //       { role: 'system', content: masterSystemPrompt },
-    //       {
-    //         role: 'user',
-    //         content: `Generate timeline for:
-    //
-    // Enhanced Script: ${enhancedScript}
-    // Style: ${stylePrompt}
-    // Beats: ${beatAnalysis.beats.join(', ')}
-    // Tempo: ${beatAnalysis.tempo} BPM
-    // Video: ${videoWidth}x${videoHeight} @ ${fps}fps
-    // Assets: ${JSON.stringify(uploadedAssets, null, 2)}`
-    //       }
-    //     ],
-    //     temperature: 0.7,
-    //     max_tokens: 3000,
-    //   })
-    // });
+    const config = {
+      provider: (process.env.AI_MODEL || '').includes('gemini') ? 'gemini' : 'openai',
+      model: process.env.AI_MODEL || 'gpt-4o',
+      apiKey: (process.env.AI_MODEL || '').includes('gemini') ? process.env.GEMINI_API_KEY : process.env.OPENAI_API_KEY
+    };
+
+    let generatedTimelineString: string;
+
+    if (config.provider === 'gemini') {
+      const response = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/${config.model}:generateContent?key=${config.apiKey}`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          contents: [{
+            parts: [{
+              text: `${masterSystemPrompt}\n\nGenerate timeline for:
+    
+    Enhanced Script: ${enhancedScript}
+    Style: ${stylePrompt}
+    Beats: ${beatAnalysis.beats.join(', ')}
+    Tempo: ${beatAnalysis.tempo} BPM
+    Video: ${videoWidth}x${videoHeight} @ ${fps}fps
+    Assets: ${JSON.stringify(uploadedAssets, null, 2)}`
+            }]
+          }],
+          generationConfig: {
+            response_mime_type: "application/json"
+          }
+        })
+      });
+
+      if (!response.ok) {
+        const errorData = await response.json();
+        throw new Error(`Gemini API error: ${JSON.stringify(errorData)}`);
+      }
+
+      const aiResponse = await response.json();
+      generatedTimelineString = aiResponse.candidates[0].content.parts[0].text;
+    } else {
+      // OpenAI API call
+      const response = await fetch('https://api.openai.com/v1/chat/completions', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${config.apiKey}`,
+        },
+        body: JSON.stringify({
+          model: config.model,
+          messages: [
+            { role: 'system', content: masterSystemPrompt },
+            {
+              role: 'user',
+              content: `Generate timeline for:
+      
+      Enhanced Script: ${enhancedScript}
+      Style: ${stylePrompt}
+      Beats: ${beatAnalysis.beats.join(', ')}
+      Tempo: ${beatAnalysis.tempo} BPM
+      Video: ${videoWidth}x${videoHeight} @ ${fps}fps
+      Assets: ${JSON.stringify(uploadedAssets, null, 2)}`
+            }
+          ],
+          temperature: 0.7,
+          max_tokens: 3000,
+          response_format: { type: 'json_object' }
+        })
+      });
+
+      if (!response.ok) {
+        const errorData = await response.json();
+        throw new Error(`OpenAI API error: ${errorData.error?.message || response.statusText}`);
+      }
+
+      const aiResponse = await response.json();
+      generatedTimelineString = aiResponse.choices[0].message.content;
+    }
+    const generatedTimeline = JSON.parse(generatedTimelineString);
+
+    return NextResponse.json({
+      success: true,
+      data: generatedTimeline,
+      message: 'Timeline generated successfully',
+    });
 
     // Mock timeline response - structure based on the MASTER_SYSTEM_PROMPT requirements
     const totalFrames = 600; // 20 seconds at 30fps
-    
+
     const mockTimeline: AnimationTimeline = {
       id: `project_${Date.now()}`,
       projectName,
