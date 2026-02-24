@@ -126,7 +126,7 @@ export function calculateSceneDurations(
   fps: number = 30
 ): Array<{ section: string; startFrame: number; endFrame: number }> {
   const durationPerSection = Math.floor(totalFrames / scriptSections.length);
-  const result = [];
+  const result: Array<{ section: string; startFrame: number; endFrame: number }> = [];
 
   scriptSections.forEach((section, idx) => {
     const startFrame = idx * durationPerSection;
