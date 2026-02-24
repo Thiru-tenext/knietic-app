@@ -1,4 +1,5 @@
 import React from 'react';
+import Link from 'next/link';
 import { Check, Zap, Cpu, ShieldCheck } from 'lucide-react';
 
 export function Pricing() {
@@ -30,56 +31,56 @@ export function Pricing() {
   ];
 
   return (
-    <section id="pricing" className="py-48 bg-mirage-black relative overflow-hidden">
+    <section id="pricing" className="py-24 bg-mirage-black relative overflow-hidden">
       <div className="clean-container">
-        <div className="text-center mb-40 reveal">
-          <div className="badge-mirage mb-10">Monetization Protocols</div>
-          <h2 className="text-6xl md:text-8xl font-black text-white mb-8 tracking-tighter leading-none">
+        <div className="text-center mb-20 reveal">
+          <div className="badge-mirage mb-6">Monetization Protocols</div>
+          <h2 className="text-5xl md:text-7xl font-black text-white mb-6 tracking-tighter leading-none">
             Structural pricing <br />
             <span className="text-mirage-gradient">for every scale.</span>
           </h2>
-          <p className="text-2xl text-slate-500 max-w-xl mx-auto leading-relaxed font-bold">
+          <p className="text-xl text-slate-500 max-w-xl mx-auto leading-relaxed font-bold">
             Select the operational tier that aligns with your architectural flux. 
           </p>
         </div>
 
-        <div className="grid lg:grid-cols-3 gap-12 items-stretch">
+        <div className="grid lg:grid-cols-3 gap-8 items-stretch">
           {tiers.map((tier) => (
-            <div key={tier.name} className={`reveal flex flex-col h-full mirage-card !p-12 transition-all duration-1000 relative group border-2 ${tier.featured ? 'border-mirage-lime shadow-glow-lime hover:scale-[1.03] z-10 bg-white/[0.03]' : 'border-white/5 bg-white/[0.01] hover:border-white/10'}`}>
+            <div key={tier.name} className={`reveal flex flex-col h-full mirage-card !p-8 transition-all duration-1000 relative group border-2 ${tier.featured ? 'border-mirage-lime shadow-glow-lime hover:scale-[1.03] z-10 bg-white/[0.03]' : 'border-white/5 bg-white/[0.01] hover:border-white/10'}`}>
               
-              <div className="absolute top-10 right-10 opacity-10 group-hover:opacity-100 transition-opacity duration-1000">
-                 {tier.featured ? <Cpu className="w-10 h-10 text-mirage-lime" /> : <ShieldCheck className="w-8 h-8 text-white" />}
+              <div className="absolute top-8 right-8 opacity-10 group-hover:opacity-100 transition-opacity duration-1000">
+                 {tier.featured ? <Cpu className="w-8 h-8 text-mirage-lime" /> : <ShieldCheck className="w-6 h-6 text-white" />}
               </div>
 
-              <div className="mb-12">
-                <div className="flex items-center gap-3 mb-6">
-                   <div className="w-2 h-2 rounded-full bg-mirage-lime animate-pulse" />
-                   <span className="text-[9px] font-black text-slate-500 uppercase tracking-[0.4em]">{tier.tag}</span>
+              <div className="mb-8">
+                <div className="flex items-center gap-3 mb-4">
+                   <div className="w-1.5 h-1.5 rounded-full bg-mirage-lime animate-pulse" />
+                   <span className="text-[8px] font-black text-slate-500 uppercase tracking-[0.4em]">{tier.tag}</span>
                 </div>
-                <h3 className="text-3xl font-black text-white mb-6 tracking-tighter leading-none">{tier.name}</h3>
-                <div className="flex items-baseline gap-3 mb-6">
-                  <span className="text-7xl font-black text-white tracking-tighter">${tier.price}</span>
-                  <span className="text-xl text-slate-700 font-black uppercase tracking-widest">/Prot</span>
+                <h3 className="text-2xl font-black text-white mb-4 tracking-tighter leading-none">{tier.name}</h3>
+                <div className="flex items-baseline gap-2 mb-4">
+                   <span className="text-5xl font-black text-white tracking-tighter">${tier.price}</span>
+                   <span className="text-sm text-slate-700 font-black uppercase tracking-widest">/Prot</span>
                 </div>
-                <p className="text-xl text-slate-600 leading-relaxed font-bold min-h-[70px]">
+                <p className="text-base text-slate-600 leading-relaxed font-bold min-h-[50px]">
                   {tier.description}
                 </p>
               </div>
 
-              <div className="w-full h-px bg-white/5 mb-12" />
+              <div className="w-full h-px bg-white/5 mb-8" />
 
-              <div className="flex-1 space-y-6 mb-16">
+              <div className="flex-1 space-y-4 mb-8">
                 {tier.features.map((feature) => (
-                  <div key={feature} className="flex items-center gap-4 group/item">
-                    <div className={`shrink-0 w-7 h-7 rounded-xl flex items-center justify-center border-2 transition-all duration-500 ${tier.featured ? 'bg-mirage-lime/10 border-mirage-lime/20 text-mirage-lime shadow-glow-lime' : 'bg-white/5 border-white/5 text-slate-600 group-hover:border-white/10 group-hover:text-white'}`}>
-                      <Check className="w-4 h-4" />
+                  <div key={feature} className="flex items-center gap-3 group/item">
+                    <div className={`shrink-0 w-6 h-6 rounded-lg flex items-center justify-center border-2 transition-all duration-500 ${tier.featured ? 'bg-mirage-lime/10 border-mirage-lime/20 text-mirage-lime shadow-glow-lime' : 'bg-white/5 border-white/5 text-slate-600 group-hover:border-white/10 group-hover:text-white'}`}>
+                      <Check className="w-3.5 h-3.5" />
                     </div>
-                    <span className="text-lg text-slate-500 font-bold group-hover/item:text-slate-200 transition-colors">{feature}</span>
+                    <span className="text-base text-slate-500 font-bold group-hover/item:text-slate-200 transition-colors">{feature}</span>
                   </div>
                 ))}
               </div>
 
-              <button className={`w-full py-6 px-10 rounded-[2rem] text-xl font-black transition-all flex items-center justify-center gap-4 active:scale-95 shadow-3xl group overflow-hidden relative ${
+              <Link href="/studio" className={`w-full py-4 px-8 rounded-[1.5rem] text-lg font-black transition-all flex items-center justify-center gap-4 active:scale-95 shadow-3xl group overflow-hidden relative ${
                 tier.featured 
                 ? 'bg-mirage-lime text-black hover:bg-white shadow-glow-lime' 
                 : 'bg-white/5 border-2 border-white/5 text-white hover:bg-white/10 hover:border-white/10'
@@ -88,7 +89,7 @@ export function Pricing() {
                   Initialize Plan <Zap className={`w-6 h-6 ${tier.featured ? 'fill-current' : 'opacity-30'}`} />
                 </span>
                 {tier.featured && <div className="absolute inset-0 bg-white/10 translate-x-[-100%] group-hover:translate-x-0 transition-transform duration-700" />}
-              </button>
+              </Link>
 
               {tier.featured && (
                 <div className="absolute -bottom-6 left-10 right-10 flex justify-center">

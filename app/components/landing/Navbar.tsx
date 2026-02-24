@@ -24,11 +24,14 @@ export function Navbar() {
         }`}
       >
         <Link href="/" className="flex items-center gap-4 group">
-          <div className={`bg-white/5 rounded-xl flex items-center justify-center text-white border border-white/10 group-hover:bg-mirage-lime group-hover:text-black transition-all duration-500 ${scrolled ? 'w-10 h-10 p-2' : 'w-14 h-14 p-3 scale-110'}`}>
-            <Target className="w-full h-full" />
+          <div className={`relative bg-white/5 rounded-xl flex items-center justify-center text-white border border-white/10 group-hover:bg-mirage-lime group-hover:text-black transition-all duration-500 overflow-hidden ${scrolled ? 'w-10 h-10 p-2' : 'w-14 h-14 p-3 scale-110'}`}>
+            <Target className="w-full h-full relative z-10" />
+            <div className="absolute inset-0 bg-gradient-to-tr from-mirage-lime/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity" />
+            {/* Running scan line */}
+            <div className="absolute inset-0 w-full h-[2px] bg-mirage-lime/40 -translate-y-full group-hover:animate-scan-fast" />
           </div>
-          <span className={`font-black tracking-tighter text-white transition-all duration-500 ${scrolled ? 'text-xl' : 'text-4xl'}`}>
-            Kinetic<span className="text-mirage-lime">.ai</span>
+          <span className={`font-black tracking-tighter text-white transition-all duration-500 relative group-hover:text-transparent group-hover:bg-clip-text group-hover:bg-gradient-to-r group-hover:from-white group-hover:via-mirage-lime group-hover:to-white group-hover:bg-[length:200%_auto] group-hover:animate-gradient-x ${scrolled ? 'text-xl' : 'text-4xl'}`}>
+            Kinetic<span className="text-mirage-lime transition-colors group-hover:text-inherit">.ai</span>
           </span>
         </Link>
 

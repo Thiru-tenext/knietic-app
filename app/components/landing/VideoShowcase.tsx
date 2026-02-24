@@ -46,7 +46,7 @@ export function VideoShowcase() {
             </div>
 
             {/* Floating Protocol Labels */}
-            <div className="absolute top-16 left-16 flex flex-col gap-6">
+            {/* <div className="absolute top-16 left-16 flex flex-col gap-6">
               <div className="flex items-center gap-4 px-8 py-4 bg-white/[0.03] backdrop-blur-3xl rounded-3xl border border-white/10 shadow-2xl">
                 <Sparkles className="w-6 h-6 text-mirage-lime" />
                 <span className="text-xl font-black text-white tracking-tighter">AI_SYNTH_04_MASTER</span>
@@ -63,7 +63,7 @@ export function VideoShowcase() {
                     <span className="text-[10px] font-black text-white/40 uppercase tracking-[0.2em]">Kernel Sec</span>
                  </div>
               </div>
-            </div>
+            </div> */}
 
             {/* Big Center Play Icon (Only on Hover) */}
             <div className="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-700">

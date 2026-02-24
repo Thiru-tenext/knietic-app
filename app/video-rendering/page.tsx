@@ -11,6 +11,7 @@ export default function Home() {
   const [props, setProps] = useState<KineticVideoProps>(defaultMyCompProps);
   const [rendering, setRendering] = useState(false);
   const [videoUrl, setVideoUrl] = useState<string | null>(null);
+  const [currentFrame, setCurrentFrame] = useState(0);
 
   // Load draft on mount
   useEffect(() => {
@@ -72,26 +73,35 @@ export default function Home() {
   };
 
   return (
-    <div className="flex flex-col h-screen bg-white text-slate-900 font-sans overflow-hidden">
+    <div className="flex flex-col h-screen bg-mirage-black text-slate-300 font-sans overflow-hidden">
       <EditorNavbar rendering={rendering} onRender={handleRender} onSaveDraft={handleSaveDraft} />
       
       <div className="flex flex-1 overflow-hidden relative">
-        <EditorSidebar videoProps={props} setVideoProps={setProps} />
-        <PreviewStage videoProps={props} totalDuration={totalDuration} videoUrl={videoUrl} />
+        <EditorSidebar 
+          videoProps={props} 
+          setVideoProps={setProps} 
+          currentFrame={currentFrame}
+        />
+        <PreviewStage 
+          videoProps={props} 
+          totalDuration={totalDuration} 
+          videoUrl={videoUrl} 
+          onFrameUpdate={setCurrentFrame}
+        />
       </div>
 
       {/* Floating Status / Pro Layer */}
-      <div className="absolute bottom-8 left-1/2 -translate-x-1/2 flex items-center gap-8 px-8 py-3 bg-white/90 backdrop-blur-xl border border-slate-100 rounded-full shadow-2xl z-50 pointer-events-none">
-         <div className="flex items-center gap-3">
-            <ShieldCheck className="w-4 h-4 text-emerald-500" />
-            <span className="text-[10px] font-black text-slate-400 uppercase tracking-widest leading-none">Kernel Secured</span>
-         </div>
-         <div className="w-px h-4 bg-slate-200" />
-         <div className="flex items-center gap-3">
-            <Target className="w-4 h-4 text-indigo-500" />
-            <span className="text-[10px] font-black text-slate-400 uppercase tracking-widest leading-none">AI SYNC v4.2</span>
-         </div>
-      </div>
+      {/* <div className="fixed bottom-8 left-1/2 -translate-x-1/2 flex items-center gap-8 px-6 py-2.5 bg-mirage-dark/90 backdrop-blur-2xl border border-white/5 rounded-md shadow-2xl z-50 pointer-events-none">
+          <div className="flex items-center gap-3">
+             <ShieldCheck className="w-3.5 h-3.5 text-mirage-lime" />
+             <span className="text-[8px] font-black text-white/40 uppercase tracking-[0.3em] leading-none">Kernel_Secured</span>
+          </div>
+          <div className="w-px h-3 bg-white/10" />
+          <div className="flex items-center gap-3">
+             <Target className="w-3.5 h-3.5 text-mirage-cyan" />
+             <span className="text-[8px] font-black text-white/40 uppercase tracking-[0.3em] leading-none">AI_SYNC_v4.2</span>
+          </div>
+      </div> */}
     </div>
   );
 }

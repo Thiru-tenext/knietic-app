@@ -48,20 +48,20 @@ export function Features() {
   ];
 
   return (
-    <section id="features" className="py-64 bg-mirage-black relative overflow-hidden">
+    <section id="features" className="py-32 bg-mirage-black relative overflow-hidden">
       {/* Decorative Gradient Beams */}
       <div className="absolute top-0 left-0 w-full h-px bg-gradient-to-r from-transparent via-white/5 to-transparent" />
       <div className="absolute bottom-0 left-0 w-full h-px bg-gradient-to-r from-transparent via-white/5 to-transparent" />
       
       <div className="clean-container">
-        <div className="flex flex-col lg:flex-row gap-32 items-center mb-56 reveal">
+        <div className="flex flex-col lg:flex-row gap-20 items-center mb-24 reveal">
           <div className="lg:w-1/2">
-            <div className="badge-mirage mb-10">Operational Capabilities</div>
-            <h2 className="text-6xl md:text-8xl font-black text-white mb-12 leading-[0.9] tracking-tighter">
+            <div className="badge-mirage mb-6">Operational Capabilities</div>
+            <h2 className="text-5xl md:text-7xl font-black text-white mb-8 leading-[0.9] tracking-tighter">
               Structural features <br />
               for <span className="text-mirage-gradient">Motion Architects.</span>
             </h2>
-            <p className="text-2xl text-slate-500 max-w-2xl leading-relaxed font-bold">
+            <p className="text-xl text-slate-500 max-w-2xl leading-relaxed font-bold">
               We've re-engineered the complex landscape of motion graphics into a singular, high-fidelity workflow for the modern enterprise.
             </p>
             
